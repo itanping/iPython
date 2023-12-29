@@ -1,0 +1,71 @@
+"""
+以图搜图：余弦相似度（Cosine Similarity）查找相似文本的原理与实现
+实验目的：比较2个文件相似性，可视化词频相似向量
+实验环境：Win10 | python 3.9.13 | OpenCV 4.4.0 | numpy 1.21.1
+实验时间：2023-11-30
+"""
+
+import re
+import numpy as np
+import jieba
+import matplotlib.pyplot as plt
+from matplotlib.font_manager import FontProperties
+from sklearn.feature_extraction.text import CountVectorizer
+
+def preprocess_text(text):
+    text = text.lower()
+    text = re.sub(r'[^a-z\u4e00-\u9fa5\s]', '', text)
+    text_words = jieba.cut(text)
+    processed_text = ' '.join(text_words)
+    return processed_text
+    
+def cosine_similarity(vector1, vector2):
+    vector1 = vector1.flatten()
+    vector2 = vector2.flatten()
+    dot_product = np.dot(vector1, vector2)
+    norm_vector1 = np.linalg.norm(vector1)
+    norm_vector2 = np.linalg.norm(vector2)
+    if norm_vector1 == 0 or norm_vector2 == 0:
+        return 0
+    similarity = dot_product / (norm_vector1 * norm_vector2)
+    return similarity
+
+def get_cosine_similarity(origin_file, target_file):
+    with open(origin_file, 'r', encoding='utf-8') as file:
+        origin_text = file.read()
+    origin_context = preprocess_text(origin_text)
+
+    origin_vectorizer = CountVectorizer(stop_words='english')
+    origin_vector = origin_vectorizer.fit_transform([origin_context])
+    origin_vector = origin_vector.T
+    feature_names = origin_vectorizer.get_feature_names_out()
+
+    with open(target_file, 'r', encoding='utf-8') as file:
+        target_text = file.read()
+        target_context = preprocess_text(target_text)
+
+    target_vectorizer = CountVectorizer(stop_words='english', vocabulary=feature_names)
+    target_vector = target_vectorizer.fit_transform([target_context])
+    target_vector = target_vector.T
+    similarity = cosine_similarity(origin_vector.toarray(), target_vector.toarray())
+    show_text_vectors(origin_vector.toarray(), target_vector.toarray(), feature_names)
+
+def show_text_vectors(origin_vector, target_vector, feature_names):
+    font = FontProperties(fname="../../P0_Doc/fonts/msyh.ttc", size=12)
+    plt.figure(figsize=(10, 5))
+    plt.plot(feature_names, origin_vector, label='Original Text Vector')
+    plt.plot(feature_names, target_vector, label='Target Text Vector')
+    plt.title('Text Vector Comparison', fontproperties=font)
+    plt.xlabel('Feature Names', fontproperties=font)
+    plt.ylabel('Vector Values', fontproperties=font)
+    plt.xticks(rotation=90, fontproperties=font)
+    plt.legend()
+    plt.tight_layout()
+    plt.show()
+
+if __name__ == "__main__":
+    test_dir_path = '../../P0_Doc/txt_data/'
+    origin_file = test_dir_path + 'CosineSimilarity_定义_org.txt'
+    target_file = test_dir_path + 'CosineSimilarity_定义_v1.0.txt'
+
+    get_cosine_similarity(origin_file, target_file)
