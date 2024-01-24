@@ -26,6 +26,37 @@ def get_aHash(img_path):
     # 灰度图像中所有像素的平均值
     img_average = np.mean(img_gray) 
 
+    """
+    # # 比较平均值：嵌套循环遍历图像的所有像素，对比灰度图像的平均灰度值，转换为二进制的图像哈希值
+    # # img_gray：是灰度图像
+    # # img_gray.shape[0] 和 img_gray.shape[1] 分别表示图像的高度和宽度
+    # img_hash_binary = [] 
+    # for i in range(img_gray.shape[0]): 
+    #     for j in range(img_gray.shape[1]): 
+    #         if img_gray[i,j] >= img_average: 
+    #             img_hash_binary.append(1)
+    #         else: 
+    #             img_hash_binary.append(0)
+    # print(f"对比灰度图像的平均像素值降噪（图像的二进制哈希值）数组={img_hash_binary}")
+
+    # # 将列表中的元素转换为字符串并连接起来，形成一组64位的图像二进制哈希值字符串
+    # img_hash_binary_str = ''.join(map(str, img_hash_binary))
+    # print(f"对比灰度图像的平均像素值降噪（图像的二进制哈希值）={img_hash_binary_str}")
+
+    # # 生成哈希值
+    # img_hash = ""
+    # # 遍历二进制哈希值：通过循环，代码以4位为一组遍历二进制哈希值 img_hash_binary_str。
+    # # range(0, 64, 4) 确保代码在哈希值的每4位之间进行迭代。
+    # for i in range(0, 64, 4):
+    #     # 将4位二进制转换为一个十六进制字符
+    #     # 在每次循环中，代码取出哈希值中的4位二进制（例如，img_hash_binary_str[i : i + 4]）
+    #     # 然后使用'%x' % int(..., 2)将这4位二进制转换为一个十六进制字符。
+    #     # int(..., 2)将二进制字符串转换为整数，'%x'将整数转换为十六进制字符。
+    #     # 将十六进制字符追加到 img_hash：在每次循环中，得到的十六进制字符将被追加到 img_hash 字符串中。
+    #     img_hash += "".join('%x' % int(img_hash_binary_str[i : i + 4], 2))
+    # print(f"图像可识别的哈希值={img_hash}")
+    """
+
     # 遍历图像像素：嵌套循环遍历图像的所有像素，对比灰度图像的平均灰度值，转换为二进制的图像哈希值
     img_hash_binary_str = ''
     for i in range(8):
@@ -85,7 +116,7 @@ for img_file in img_files:
     img_hash_all.append((os.path.relpath(img_path), img_hash, distance))
 
 for img in img_hash_all:
-    print(f"图片名称：{img[0]}，图片HASH：{img[1]}，与图片目标的近似值（汉明距离）：{img[2]}")
+    print(f"图像：{img[0]}，图像HASH：{img[1]}，与目标图像的相似值（汉明距离）：{img[2]}")
 
 time_end = time.time()
 print(f"耗时：{time_end - time_start}")

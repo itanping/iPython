@@ -38,6 +38,26 @@ def get_pHash(img_path):
     # 生成图像可识别哈希值
     img_hash = ''.join(map(lambda x:'%x' % int(img_hash_str[x : x + 4], 2), range(0, 64, 4)))
     # print(f"图像可识别的哈希值={img_hash}")
+
+    """
+    # # 版本二
+    # # 生成二进制哈希值
+    # img_hash_str = ''
+    # for i in range(8):
+    #     for j in range(8):
+    #         if img_dct[i, j] > img_avg:
+    #             img_hash_str += '1'
+    #         else:
+    #             img_hash_str += '0'
+    # print(f"图像的二进制哈希值={img_hash_str}")
+
+    # # 生成图像可识别哈希值
+    # img_hash = ''
+    # for i in range(0, 64, 4):
+    #     img_hash += ''.join('%x' % int(img_hash_str[i: i + 4], 2))
+    # print(f"图像可识别的哈希值={img_hash}")
+    """
+
     return img_hash
 
 
@@ -89,7 +109,7 @@ for img_file in img_files:
     img_hash_all.append((os.path.relpath(img_path), img_hash, distance))
 
 for img in img_hash_all:
-    print(f"图片名称：{img[0]}，图片HASH：{img[1]}，与图片目标的近似值（汉明距离）：{img[2]}")
+    print(f"图像：{img[0]}，图像HASH：{img[1]}，与目标图像的相似值（汉明距离）：{img[2]}")
 
 time_end = time.time()
 print(f"耗时：{time_end - time_start}")

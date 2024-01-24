@@ -1,6 +1,6 @@
 """
 以图搜图：余弦相似度（Cosine Similarity）查找相似文本的原理与实现
-实验目的：比较2个文件相似性
+实验目的：使用余弦相似度在目标素材库中查找相似文件
 实验环境：Win10 | python 3.9.13 | OpenCV 4.4.0 | numpy 1.21.1 | Matplotlib 3.7.1 | jieba 0.42.1
 实验时间：2023-11-30
 实例名称：txtConsineSimilarity_v1.4.py
